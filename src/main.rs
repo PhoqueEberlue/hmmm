@@ -203,17 +203,21 @@ impl Display for Hypercube {
 
 fn main() {
     // TODO: fix cases where the size is not a power of 2
-    let mut hypercube = Hypercube::new(2);
+    let mut hypercube = Hypercube::new(4);
     println!("{}", hypercube);
 
     let matrix_a = vec![
-        vec![1,2],
-        vec![3,4],
+        vec![1,2,0,0],
+        vec![0,1,1,3],
+        vec![1,0,0,2],
+        vec![0,0,2,0],
     ];
 
     let matrix_b = vec![
-        vec![1,2],
-        vec![3,4],
+        vec![1,2,2,0],
+        vec![0,3,2,0],
+        vec![1,0,1,2],
+        vec![0,1,2,0],
     ];
 
     hypercube.init(matrix_a, matrix_b);
