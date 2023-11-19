@@ -14,11 +14,15 @@ struct Processor {
 struct Hypercube {
     processor_list: Vec<Processor>,
     number_bits_per_dimension: u32,
+    number_processor_per_dimension: u32,
     number_bits_total: u32,
     number_processors_total: u32,
-    number_processor_per_dimension: u32,
 }
 
+/// ^ Y
+/// |  / Z
+/// | /
+/// O- - - > X
 impl Hypercube {
     fn new(matrix_size: usize) -> Hypercube {
         let number_processors_total = matrix_size.pow(3) as u32; 
@@ -77,7 +81,7 @@ impl Hypercube {
     }
 
     fn step_1(&mut self) {
-        // Looping through y in reverse
+        // Looping through y by skipping the first index because we access the underneath value
         for y in 1..self.number_processor_per_dimension {
             for z in 0..self.number_processor_per_dimension {
                 for x in 0..self.number_processor_per_dimension {
@@ -86,7 +90,7 @@ impl Hypercube {
                     let a_value = underneath_processor.a;
                     let b_value = underneath_processor.b;
 
-                    // Changing a and b registers with the value from the bottom
+                    // Changing a and b registers with the value from the underneath processor
                     let processor = self.get_mut_processor(x, y, z);
                     processor.a = a_value;
                     processor.b = b_value;
@@ -96,7 +100,7 @@ impl Hypercube {
     }
 
     fn step_2(&mut self) {
-        // Looping through x in reverse
+        // Looping through x
         for x in 0..self.number_processor_per_dimension {
             for y in 0..self.number_processor_per_dimension {
                 for z in 0..self.number_processor_per_dimension {
@@ -154,19 +158,55 @@ impl Hypercube {
             }
         }
     }
+
+    pub fn compute_result(&mut self) {
+        println!("{}", self);
+
+        self.step_1();
+        println!("step 1");
+        println!("{}", self);
+
+        self.step_2();
+        println!("step 2");
+        println!("{}", self);
+
+        self.step_3();
+        println!("step 3");
+        println!("{}", self);
+
+        self.step_4();
+        println!("step 4");
+        println!("{}", self);
+
+        self.step_5();
+        println!("step 5");
+        println!("{}", self);
+    }
+
+    pub fn get_result(&self) -> Vec<Vec<i64>> {
+        let mut res = vec![];
+
+        for z in 0..self.number_processor_per_dimension {
+            let mut row = vec![];
+
+            for x in 0..self.number_processor_per_dimension {
+                row.push(self.get_processor(x, 0, z).c);
+            }
+
+            res.push(row);
+        }
+
+        res
+    }
 }
 
 impl Display for Hypercube {
-    /// ^ Y
-    /// |  / Z
-    /// | /
-    /// O-----> X
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut res = String::new();
 
         res.push_str("         A               B               C\n");
 
-        // Printing for top to bottom
+        // Printing from top to bottom
         for y in (0..self.number_processor_per_dimension).rev() {
 
             // Printing the depth of the cube on multiple lines
@@ -202,7 +242,6 @@ impl Display for Hypercube {
 }
 
 fn main() {
-    // TODO: fix cases where the size is not a power of 2
     let mut hypercube = Hypercube::new(4);
     println!("{}", hypercube);
 
@@ -221,27 +260,12 @@ fn main() {
     ];
 
     hypercube.init(matrix_a, matrix_b);
-    println!("Init");
-    println!("{}", hypercube);
+    hypercube.compute_result();
 
-    hypercube.step_1();
-    println!("step 1");
-    println!("{}", hypercube);
+    let result = hypercube.get_result();
 
-    hypercube.step_2();
-    println!("step 2");
-    println!("{}", hypercube);
-
-    hypercube.step_3();
-    println!("step 3");
-    println!("{}", hypercube);
-
-    hypercube.step_4();
-    println!("step 4");
-    println!("{}", hypercube);
-
-    hypercube.step_5();
-    println!("step 5");
-    println!("{}", hypercube);
+    for row in result {
+        println!("{:?}", row);
+    }
 }
 
