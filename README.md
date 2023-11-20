@@ -14,8 +14,14 @@ Install [rust](https://www.rust-lang.org/tools/install) and run the following co
 
 ```shell
 cargo run
+```
 
-         A               B               C
+Each point of the hypercube represent a processor and each of them have 3 registers A, B and C.
+The hypercube have been split into 3 for better readability of the registers.
+
+Example result:
+```
+Register A      Register B      Register C
       0 0 0 0         0 1 2 0         0 0 0 0 
     3 3 3 3         0 1 2 0         0 3 6 0 
   2 2 2 2         0 1 2 0         0 2 4 0 
@@ -28,10 +34,10 @@ cargo run
     1 1 1 1         0 3 2 0         1 6 9 2 
   0 0 0 0         0 3 2 0         0 2 4 0 
 0 0 0 0         0 3 2 0         2 0 2 4 
-      1 1 1 1         1 2 2 0         1 8 6 0 
-    0 0 0 0         1 2 2 0         1 6 9 2 
-  1 1 1 1         1 2 2 0         1 4 6 0 
-0 0 0 0         1 2 2 0         2 0 2 4 
+      1 1 1 1         1 2 2 0         1 8 6 0  <--| Product result
+    0 0 0 0         1 2 2 0         1 6 9 2 <-----| of the two
+  1 1 1 1         1 2 2 0         1 4 6 0 <-------| input matrices.
+0 0 0 0         1 2 2 0         2 0 2 4 <---------| 
 ```
 
 ## Running WebAssembly app
@@ -66,6 +72,4 @@ Yarn worked better for me in term of dependency resolving, but it's up to you, a
 Here is an example of what it looks like:
 
 ![example-wasm](https://github.com/PhoqueEberlue/hmmm/blob/main/example-wasm.png)
-
-
 
