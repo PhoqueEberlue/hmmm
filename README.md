@@ -65,7 +65,7 @@ Yarn worked better for me in term of dependency resolving, but it's up to you, a
 
 Here is an example of what it looks like:
 
-![example-wasm](https://github.com/PhoqueEberlue/game-of-rust/blob/main/example-wasm.png)
+![example-wasm](https://github.com/PhoqueEberlue/hmm/blob/main/example-wasm.png)
 
 
 
